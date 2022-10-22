@@ -1,0 +1,4 @@
+data/posters/**
+filmrecb/static/**
+filmrecf/node_modules
+filmrecb/__pycache__
