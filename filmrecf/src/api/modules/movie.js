@@ -13,4 +13,11 @@ export default ({request}) => ({
             params: data
         })
     },
+    SEARCH(data = {}) {
+        return request({
+            url: "/api/search",
+            method: "post",
+            data: data
+        })
+    },
 })

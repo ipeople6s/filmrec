@@ -17,12 +17,54 @@
           <el-input placeholder="Input the name of film" v-model="filmName" width="50">
           </el-input>
         </div>
-
       </div>
-
-
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="searchFilm">Search</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="Find Result" :visible.sync="recDialogVisible" width="80%">
+      <div style="width: 100%; display: flex; margin-top: 10px; flex-wrap: wrap;">
+        <el-card :body-style="{ padding: '0px' }" style="width: 270px; margin-left: 2%; margin-top: 10px;">
+          <div style="font-size: large;">Result</div>
+          <img :src="'http://127.0.0.1:8848/static/' + findMovie.id + '.jpg'" class="image"
+            style="width: 100%; display: block" />
+          <div style="padding: 14px">
+            <span
+              style="margin-top: 12px; width: 20px; max-width: 2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+              {{findMovie.name}}
+            </span>
+            <div style="margin-top: 13px;line-height: 12px;">
+              <el-tag v-for="t in findMovie.genres" size="mini" :key="t" style="margin-right: 4px;"> {{t}} </el-tag>
+              <el-button type="text" class="button"
+                style="float: right; padding: 0px; padding-top: -5px; font-size: medium;" @click="openRating(findMovie.id)">
+                Rating</el-button>
+            </div>
+
+          </div>
+        </el-card>
+        <el-card v-for="(m, idx) in recMovies" :key="m.id" :body-style="{ padding: '0px' }"
+          style="width: 270px; margin-left: 2%; margin-top: 10px;">
+          <div style="font-size: large;">Recommended movie-{{idx + 1}}</div>
+          <img :src="'http://127.0.0.1:8848/static/' + m.id + '.jpg'" class="image"
+            style="width: 100%; display: block" />
+          <div style="padding: 14px">
+            <span
+              style="margin-top: 12px; width: 20px; max-width: 2em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+              {{m.name}}
+            </span>
+            <div style="margin-top: 13px;line-height: 12px;">
+              <el-tag v-for="t in m.genres" size="mini" :key="t" style="margin-right: 4px;"> {{t}} </el-tag>
+              <el-button type="text" class="button"
+                style="float: right; padding: 0px; padding-top: -5px; font-size: medium;" @click="openRating(m.id)">
+                Rating</el-button>
+            </div>
+
+          </div>
+        </el-card>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="sendRating">Done</el-button>
       </span>
     </el-dialog>
 
@@ -69,8 +111,8 @@
             <div style="margin-top: 13px;line-height: 12px;">
               <el-tag v-for="t in m.genres" size="mini" :key="t" style="margin-right: 4px;"> {{t}} </el-tag>
               <el-button type="text" class="button"
-              style="float: right; padding: 0px; padding-top: -5px; font-size: medium;"
-              @click="openRating(m.id)">Rating</el-button>
+                style="float: right; padding: 0px; padding-top: -5px; font-size: medium;" @click="openRating(m.id)">
+                Rating</el-button>
             </div>
 
           </div>
@@ -78,7 +120,7 @@
       </div>
     </div>
 
-    <el-pagination background layout="prev, pager, next" :total="totalPages" :page-size="12" :pager-count="12"
+    <el-pagination background layout="prev, pager, next" :total="totalPages" :page-size=12 :pager-count=13
       :current-page.sync="currentPage" @current-change="changeCurrentPage">
     </el-pagination>
   </div>
@@ -93,8 +135,9 @@ export default {
   data: () => ({
     rateDialogVisible: false,
     findDialogVisible: false,
+    recDialogVisible: false,
     rateValue: "",
-    colors: "",
+    colors: [],
     activeIndex: "1",
     currentPage: 0,
     totalPages: 0,
@@ -102,6 +145,8 @@ export default {
     label: -1,
     movieList: [],
     movieId: 0,
+    recMovies: [],
+    findMovie: {},
   }),
   async mounted() {
     await this.changeCurrentPage();
@@ -123,13 +168,24 @@ export default {
         // request some films
       }
     },
-    searchFilm() {
+    async searchFilm() {
       if (this.filmName == "") {
         this.$message.error("You must fill in the film name");
         return;
       }
-      this.findDialogVisible = false;
+      const resp = await api.movie.SEARCH({
+        name: this.filmName,
+      })
+      if (resp.movies === undefined) {
+        this.$message.error("The film does not exist");
+        this.findDialogVisible = false;
+        return;
+      }
 
+      this.findMovie = resp.movies;
+      this.recMovies = resp.rec;
+      this.findDialogVisible = false;
+      this.recDialogVisible = true;
     },
     openSearchDialog() {
       this.filmName = ""

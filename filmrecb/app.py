@@ -1,5 +1,6 @@
 from ctypes.wintypes import INT
 import json
+from pickle import NONE
 from flask import Flask, request
 import os
 import datetime
@@ -63,6 +64,48 @@ class MovieGenres(db.Model):
     g_id = db.Column(db.Integer, db.ForeignKey('tb_genres.g_id'))
     movie_id = db.Column(db.Integer, db.ForeignKey('tb_movie.movie_id'))
 
+
+# 10 movies recommended
+def get_rec_movies():
+    return list(range(1, 5))
+
+
+def get_movies_by_id(ids):
+    res = []
+    for id in ids:
+        m = Movie.query.filter(Movie.movie_id == id).first()
+        if m is not None:
+            d = dict()
+            d["name"] = m.movie_name
+            d["id"] = m.movie_id
+            d["poster"] = m.movie_poster
+            all_genres = db.session.query(Genres.g_name).filter(Genres.g_id == MovieGenres.g_id).filter(MovieGenres.movie_id == m.movie_id).all()
+            d["genres"] =[]
+            for i in all_genres:
+                d["genres"].extend(i)
+            res.append(d)
+    return res
+
+
+@app.route('/api/search', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def search_movie():
+    json_data = request.json
+    name = json_data["name"]
+    print(name)
+    t = Movie.query.filter(Movie.movie_name.startswith(name)).first()
+    res = None
+    if t is not None:
+        res = dict()
+        res["name"] = t.movie_name
+        res["id"] = t.movie_id
+        res["poster"] = t.movie_poster
+        all_genres = db.session.query(Genres.g_name).filter(Genres.g_id == MovieGenres.g_id).filter(MovieGenres.movie_id == t.movie_id).all()
+        res["genres"] =[]
+        for i in all_genres:
+            res["genres"].extend(i)
+
+    return {"data": {"movies": res, "rec": get_movies_by_id(get_rec_movies())}, "status": 200, "message": ""}
 
 
 @app.route('/api/movies', methods=['GET'])
