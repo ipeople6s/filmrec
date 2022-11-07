@@ -68,7 +68,7 @@
       </span>
     </el-dialog>
 
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1">Movies</el-menu-item>
       <el-submenu index="2">
         <template slot="title">Category</template>
@@ -81,6 +81,14 @@
         <el-menu-item index="2-7">Drama</el-menu-item>
         <el-menu-item index="2-8">Family</el-menu-item>
         <el-menu-item index="2-9">History</el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="3">
+        <template slot="title">Algorithm</template>
+        <el-menu-item index="3-1"> Collaborative Filtering</el-menu-item>
+        <el-menu-item index="3-2"> </el-menu-item>
+        <el-menu-item index="3-3"> </el-menu-item>
+        <el-menu-item index="3-4"> </el-menu-item>
       </el-submenu>
 
       <div style="
@@ -138,7 +146,6 @@ export default {
     recDialogVisible: false,
     rateValue: "",
     colors: [],
-    activeIndex: "1",
     currentPage: 0,
     totalPages: 0,
     filmName: "",
@@ -163,9 +170,18 @@ export default {
         return "Good Evening"
       }
     },
-    handleSelect() {
-      if (this.activeIndex == "1") {
+    handleSelect(key) {
+      console.log(key);
+      if (key == "1") {
         // request some films
+      } else if (key == "3-1") {
+        console.log("select the cf");
+      } else if (key == "3-2") {
+        console.log("select the 3-2");
+      } else if (key == "3-3") {
+        console.log("select the 3-3");
+      } else if (key == "3-4") {
+        console.log("select the 3-4");
       }
     },
     async searchFilm() {
