@@ -103,6 +103,8 @@ def insert_genres():
 '''
 Different posters come in different sizes
 '''
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 def resize_img():
     from PIL import Image
     for f in listdir("./filmrecb/static/"):

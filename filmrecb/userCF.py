@@ -5,7 +5,7 @@ user collaborative flitering algorithm:
 
 import pandas as pd
 import numpy as np
-from data_process import get_movies,get_ratings,get_users
+from util import get_movies, get_ratings, get_users
 from math import *
 import random
 
@@ -116,7 +116,7 @@ class UserCF():
                 else:
                     results[movie] = results[movie] + 1
 
-        return dict(sorted(results.items(),key = lambda x : x[1],reverse=True)[0:min(nitems,len(results))])
+        return list(dict(sorted(results.items(),key = lambda x : x[1],reverse=True)[0:min(nitems,len(results))]).keys())
                 
 
 

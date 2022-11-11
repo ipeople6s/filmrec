@@ -28,7 +28,7 @@ Functions: change dat file to list
 import os
 import pandas as pd
 
-data_root = '../data/ml-1m'
+data_root = '../../data/ml-1m'
 
 def get_movies():
     # get movies.dat path

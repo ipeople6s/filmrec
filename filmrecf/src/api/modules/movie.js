@@ -20,4 +20,11 @@ export default ({request}) => ({
             data: data
         })
     },
+    ALGO(data = {}) {
+        return request({
+            url: "/api/algo",
+            method: "post",
+            data: data
+        })
+    },
 })

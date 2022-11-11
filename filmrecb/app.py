@@ -12,6 +12,9 @@ import shutil
 import base64
 import urllib
 import re
+# from filmrecb import userCF
+from userCF import userCF
+
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -48,7 +51,8 @@ class Genres(db.Model):
 
     g_id = db.Column(db.Integer, primary_key=True)
     g_name = db.Column(db.String(64))
-
+    
+id = 11
 
 # create table tb_movie_genres (
 #     mg_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,15 +69,18 @@ class MovieGenres(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('tb_movie.movie_id'))
 
 
+
 # 10 movies recommended
 def get_rec_movies():
-    return list(range(1, 5))
+    res = userCF.recommend(id)
+    print(res)
+    return res
 
 
 def get_movies_by_id(ids):
     res = []
     for id in ids:
-        m = Movie.query.filter(Movie.movie_id == id).first()
+        m = Movie.query.filter(Movie.movie_id == int(id)).first()
         if m is not None:
             d = dict()
             d["name"] = m.movie_name
@@ -84,6 +91,7 @@ def get_movies_by_id(ids):
             for i in all_genres:
                 d["genres"].extend(i)
             res.append(d)
+    print(res)
     return res
 
 
@@ -106,6 +114,16 @@ def search_movie():
             res["genres"].extend(i)
 
     return {"data": {"movies": res, "rec": get_movies_by_id(get_rec_movies())}, "status": 200, "message": ""}
+
+algo = "CF"
+
+@app.route('/api/algo', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def change_rec_algo():
+    global algo
+    json_data = request.json
+    algo = json_data["algo"]
+    return {"data": {}, "status": 200, "message": ""}
 
 
 @app.route('/api/movies', methods=['GET'])
@@ -143,7 +161,6 @@ def get_movies():
 
     for m in all_movies_t[page * 12: (page + 1) * 12]:
         res.append({"name": m.movie_name, "id": m.movie_id, "poster": "", "genres": list(map(lambda x: d1[x], d2[m.movie_id]))})
-    print(res)
     return {"data": {"movies": res, "total": len(all_movies_t)}, "status": 200, "message": ""}
 
 
