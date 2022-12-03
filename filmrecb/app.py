@@ -14,6 +14,9 @@ import urllib
 import re
 # from filmrecb import userCF
 from userCF import userCF
+from MF import mf
+from .deepRec.inference import xDeepFM_model,onn_model,inference
+
 
 
 app = Flask(__name__)
