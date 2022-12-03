@@ -35,7 +35,7 @@ def get_movies():
     movies_path = os.path.join(data_root,'movies.dat')
     # open movies.dat file
     cols = ['MovieID','Title','Genres']
-    df = pd.read_csv(movies_path,sep='::', encoding='ISO-8859-1', header=None)
+    df = pd.read_csv(movies_path,sep='::', encoding='ISO-8859-1', header=None, engine='python')
     df.columns = cols
     return df
 
@@ -44,7 +44,7 @@ def get_ratings():
     ratings_path = os.path.join(data_root,'ratings.dat')
     # open ratings.dat file
     cols = ['UserID','MovieID','Rating','Timestamp']
-    df = pd.read_csv(ratings_path,sep='::',encoding='ISO-8859-1',header=None)
+    df = pd.read_csv(ratings_path,sep='::',encoding='ISO-8859-1',header=None, engine='python')
     df.columns = cols
     return df
 

@@ -17,7 +17,7 @@ export default ({request}) => ({
         return request({
             url: "/api/search",
             method: "post",
-            data: data
+            data: data,
         })
     },
     ALGO(data = {}) {

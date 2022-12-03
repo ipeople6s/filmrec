@@ -86,9 +86,9 @@
       <el-submenu index="3">
         <template slot="title">Algorithm</template>
         <el-menu-item index="3-1"> Collaborative Filtering</el-menu-item>
-        <el-menu-item index="3-2"> xDeepFM </el-menu-item>
-        <el-menu-item index="3-3"> ONN</el-menu-item>
-        <el-menu-item index="3-4"> MD</el-menu-item>
+        <el-menu-item index="3-2"> Matrix Factorization </el-menu-item>
+        <el-menu-item index="3-3"> XDeepFM </el-menu-item>
+        <el-menu-item index="3-4"> MD </el-menu-item>
       </el-submenu>
 
       <div style="
@@ -181,9 +181,15 @@ export default {
         });
         this.$message.success("Change success.");
       } else if (key == "3-2") {
-        console.log("select the 3-2");
+        await api.movie.ALGO({
+          algo: "MF"
+        });
+        this.$message.success("Change success.");
       } else if (key == "3-3") {
-        console.log("select the 3-3");
+        await api.movie.ALGO({
+          algo: "XDeepFM"
+        });
+        this.$message.success("Change success.");
       } else if (key == "3-4") {
         console.log("select the 3-4");
       }
@@ -195,6 +201,7 @@ export default {
       }
       const resp = await api.movie.SEARCH({
         name: this.filmName,
+        
       })
       if (resp.movies === undefined) {
         this.$message.error("The film does not exist");

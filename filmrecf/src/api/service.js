@@ -8,7 +8,8 @@ import store from '@/store/index';
 function createService() {
 
     const service = axios.create({
-        baseURL: "http://localhost:8848/"
+        baseURL: "http://localhost:8848/",
+        timeout: 1000 * 60 * 2,
     });
 
     service.interceptors.request.use(
@@ -96,7 +97,7 @@ function createService() {
 function createRequestsFunction(service) {
     return function (config) {
         const defalutConfig = {
-            timeout: 5000
+            timeout: 5000 * 20
         };
         return service(assign({}, config, defalutConfig));
     }

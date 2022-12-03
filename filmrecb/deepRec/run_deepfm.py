@@ -18,6 +18,8 @@ from collections import OrderedDict, namedtuple, defaultdict
 import random
 import os,sys
 from deepctrmodels.deepfm import Deepfm
+from deepctrmodels import Deepfm
+
 
 os.chdir(sys.path[0])
 

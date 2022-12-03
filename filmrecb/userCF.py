@@ -119,8 +119,4 @@ class UserCF():
         return list(dict(sorted(results.items(),key = lambda x : x[1],reverse=True)[0:min(nitems,len(results))]).keys())
                 
 
-
-
 userCF = UserCF()
-print(userCF.recommend(1))
-print(userCF.recommend(3))

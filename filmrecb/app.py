@@ -15,7 +15,7 @@ import re
 # from filmrecb import userCF
 from userCF import userCF
 from MF import mf
-from .deepRec.inference import xDeepFM_model,onn_model,inference
+from deepRec.inference import inference, get_model
 
 
 
@@ -72,11 +72,16 @@ class MovieGenres(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('tb_movie.movie_id'))
 
 
+xDeepFM_model, onn_model = get_model()
 
 # 10 movies recommended
 def get_rec_movies():
-    res = userCF.recommend(id)
-    print(res)
+    if algo == "CF":
+        res = userCF.recommend(id, nitems=4)
+    elif algo == "MF":
+        res = mf.recommend(id, nitems=4)
+    elif algo == "XDeepFM":
+        res = inference(id, onn_model)
     return res
 
 
