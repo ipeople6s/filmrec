@@ -331,8 +331,7 @@ class BaseModel(nn.Module):
         :return: Numpy array(s) of predictions.
         """
         model = self.eval()
-        if isinstance(x, dict):
-            x = [x[feature] for feature in self.feature_index]
+        x = [x[feature] for feature in self.feature_index]
         for i in range(len(x)):
             if len(x[i].shape) == 1:
                 x[i] = np.expand_dims(x[i], axis=1)
