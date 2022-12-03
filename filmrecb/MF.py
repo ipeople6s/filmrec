@@ -10,10 +10,11 @@ import os,sys
 
 os.chdir(sys.path[0])
 
-def save_pq(P,Q):
+def save_pq(P,Q,rating_matrix):
     P = np.array(P)
     Q = np.array(Q)
-    np.savez('pq.npz',P=P,Q=Q)
+    rm = np.array(rating_matrix)
+    np.savez('pq.npz',P=P,Q=Q,rm=rm)
 
 class MatrixFactorization():
     def __init__(self) -> None:
@@ -28,17 +29,21 @@ class MatrixFactorization():
         self.num_of_movies = max(self.all_movies)
 
         self.num_of_movie_types = len(self.movie_types)
-        # split training set and testing set
-        # self.trainData = self.allDataToTrain()
-        self.trainData,self.testData = self.splitData(3,47)
-        # get rating_matrix
-        self.get_rating_matrix()
         # matrix factorization
-        self.P,self.Q = self.matrixFactorization()
-        save_pq(self.P,self.Q)
-        # get new matrix factorization
+        if os.path.exists('pq.npz'):
+            pq_npz = np.load('pq.npz')
+            self.P = pq_npz['P']
+            self.Q = pq_npz['Q']
+            self.rating_matrix = pq_npz['rm']
+        else:
+            # split training set and testing set
+            self.trainData,self.testData = self.splitData(3,47)
+            # get rating_matrix
+            self.get_rating_matrix()
+            self.P,self.Q = self.matrixFactorization()
+            save_pq(self.P,self.Q,self.rating_matrix)
+            # get new matrix factorization
         self.new_rating_matrix = self.newRatingMatrix(self.P,self.Q)
-        print('done\n')
     
     def get_rating_matrix(self):
         '''
@@ -148,7 +153,7 @@ class MatrixFactorization():
         return P,Q
     
     def newRatingMatrix(self,P,Q):
-        return P * Q
+        return np.matmul(P, Q)
     
     def recommend(self,user_rec,nitems=4):
         user_rec = user_rec - 1
@@ -163,3 +168,4 @@ class MatrixFactorization():
         return rec_movies
 
 mf = MatrixFactorization()
+# results = mf.recommend(178)
