@@ -1,6 +1,6 @@
 # Brief
 
-We implement two deep learning based recommender algorithm (xDeepFM and ONN) and two non-deep learning based recommender algorithm (Collaborative Filter and Matrix Decomposition Algorithm based on Gradient Descent) to recommend movies for system users. Besides, we designed a web user interface for the recommender system, which can visualize recommender results and make it convenient for users to utilize the system. Then, we give an overview of the development of recommender systems, and compare the performance of the four algorithms we use.
+I implement two deep learning based recommender algorithm (xDeepFM and ONN) and two non-deep learning based recommender algorithm (Collaborative Filter and Matrix Decomposition Algorithm based on Gradient Descent) to recommend movies for system users. Besides, I designed a Ib user interface for the recommender system, which can visualize recommender results and make it convenient for users to utilize the system. Then, I give an overview of the development of recommender systems, and compare the performance of the four algorithms I use.
 
 # Running the project
 
@@ -67,4 +67,4 @@ The details of collaborative filter can be seen in *MF.py* in filmrecb directory
 
 The details of collaborative filter can be seen in *inference.py, train_deepfm.py, train_nffm.py* in deeper directory.
 
-These two deep learning models are CTR models. So we change the movielens data to fit with CTR model.
+These two deep learning models are CTR models. So I change the movielens data to fit with CTR model.
